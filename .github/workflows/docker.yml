@@ -32,5 +32,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ github.repository }}:latest
+          # 不要用变量，直接写死成全小写
+          tags: ghcr.io/lzh0410/cfnat-docker:latest
+          # 包含你的 N1 盒子所需的 arm64 架构
           platforms: linux/amd64,linux/arm64
