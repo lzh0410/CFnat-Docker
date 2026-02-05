@@ -1,25 +1,21 @@
-name: Build
+name: Build to DockerHub
 on:
   push:
-    branches: [ "main" ] # 只要你更新 main 分支就会触发
-  workflow_dispatch:      # 允许你手动点击按钮运行
+    branches: [ "main" ]
+  workflow_dispatch: 
 
 jobs:
   docker:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Login to GHCR
+      - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }} # 自动调用，无需手动设置
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -32,7 +28,6 @@ jobs:
         with:
           context: .
           push: true
-          # 不要用变量，直接写死成全小写
-          tags: ghcr.io/lzh0410/cfnat-docker:latest
-          # 包含你的 N1 盒子所需的 arm64 架构
+          # 这样你的名字就变成了最简洁的 用户名/项目名
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cfnat:latest
           platforms: linux/amd64,linux/arm64
