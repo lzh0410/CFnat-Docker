@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: write     # 必须有这个权限才能推送到你的 GitHub 仓库
+      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,7 +32,5 @@ jobs:
         with:
           context: .
           push: true
-          # 关键修改：推送镜像到你自己的 GitHub 路径
           tags: ghcr.io/${{ github.repository }}:latest
-          # 包含你的 N1 盒子所需的 arm64 架构
           platforms: linux/amd64,linux/arm64
